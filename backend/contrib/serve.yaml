@@ -1,0 +1,50 @@
+version: 1.0.0
+
+serve:
+  api:
+    base_url: http://127.0.0.1:5320/
+    port: 5320
+    cors:
+      enabled: true
+      max_age: 12h
+      allow_wildcard: true
+      allowed_origins:
+        - "*"
+      allowed_methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - HEAD
+        - OPTIONS
+      allowed_headers:
+        - "*"
+        - "Authorization"
+      allow_credentials: true
+  ui:
+    dir: ../apps/web-antd/dist/
+    lifespan: 144h
+
+auth:
+  token:
+    issuer: http://127.0.0.1:5556
+    lifespan: 24h
+    # hs256 hs512
+    algorithm: hs256
+    key: 01JJG8A9W6H9ZEVRN353N7ZSMK
+  credentials:
+    - username: super@example.com
+      realname: Super
+      # bcrypt hash of the string "password"
+      password: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+      menus:
+        - "*"
+  cookies:
+    path: "/"
+    # strict lax none
+    same_site: none
+    domain: ""
+    http_only: true
+
+dev: false
