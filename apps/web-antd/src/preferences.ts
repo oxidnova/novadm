@@ -10,4 +10,12 @@ export const overridesPreferences = defineOverridesPreferences({
   app: {
     name: import.meta.env.VITE_APP_TITLE,
   },
+  logo: {
+    source: '/favicon.png',
+  },
+  copyright: {
+    companyName: 'Nova',
+    companySiteLink: '/',
+    date: '2025',
+  },
 });

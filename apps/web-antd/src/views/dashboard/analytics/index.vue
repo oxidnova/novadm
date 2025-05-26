@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 import type { AnalysisOverviewItem } from '@vben/common-ui';
 import type { TabOption } from '@vben/types';
 
@@ -86,5 +86,11 @@ const chartTabs: TabOption[] = [
         <AnalyticsVisitsSales />
       </AnalysisChartCard>
     </div>
+  </div>
+</template> -->
+<template>
+  <div class="p-5">
+    Welcome to the Nova Amdin Homepage(TODO), where you can easily switch tabs
+    to access different system information.
   </div>
 </template>
