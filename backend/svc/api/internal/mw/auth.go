@@ -7,11 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/oxidnova/go-kit/logx"
+	"github.com/oxidnova/go-kit/x/errorx"
 	"github.com/oxidnova/novadm/backend/driver/auth"
 	"github.com/oxidnova/novadm/backend/driver/schema"
 	"github.com/oxidnova/novadm/backend/driver/schema/code"
 	"github.com/oxidnova/novadm/backend/internal/config"
-	"github.com/oxidnova/novadm/backend/internal/errorx"
 )
 
 type Auth struct {

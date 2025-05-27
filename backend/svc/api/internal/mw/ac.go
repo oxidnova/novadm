@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/oxidnova/go-kit/x/errorx"
 	"github.com/oxidnova/novadm/backend/driver/schema"
 	"github.com/oxidnova/novadm/backend/driver/schema/code"
-	"github.com/oxidnova/novadm/backend/internal/errorx"
 )
 
 type Ac struct {

@@ -7,10 +7,10 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/oxidnova/go-kit/logx"
+	"github.com/oxidnova/go-kit/x/errorx"
 	"github.com/oxidnova/novadm/backend/driver/schema"
 	"github.com/oxidnova/novadm/backend/driver/schema/code"
 	"github.com/oxidnova/novadm/backend/internal/config"
-	"github.com/oxidnova/novadm/backend/internal/errorx"
 	"golang.org/x/crypto/bcrypt"
 )
 

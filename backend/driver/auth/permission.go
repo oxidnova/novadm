@@ -3,9 +3,9 @@ package auth
 import (
 	"strings"
 
+	"github.com/oxidnova/go-kit/x/errorx"
 	"github.com/oxidnova/novadm/backend/driver/schema"
 	"github.com/oxidnova/novadm/backend/driver/schema/code"
-	"github.com/oxidnova/novadm/backend/internal/errorx"
 )
 
 var allMenus = map[string]any{

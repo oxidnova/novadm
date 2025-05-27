@@ -1,14 +1,18 @@
 package code
 
-type Code int
+import (
+	"github.com/oxidnova/go-kit/x/code"
+)
+
+type Code = code.Code
 
 const (
-	Success          Code = 0 // Success
-	BadRequest       Code = 1 // BadRequest
-	InvalidArguments Code = 2 // InvalidArguments
-	Forbidden        Code = 3 // Forbidden
-	NotFound         Code = 4 // NotFound
-	Internal         Code = 5 // Internal
-	Unauthorized     Code = 6 // Unauthorized
-	Unknown          Code = 9 // Unknown
+	Success          Code = code.Success          // Success
+	BadRequest       Code = code.BadRequest       // BadRequest
+	InvalidArguments Code = code.InvalidArguments // InvalidArguments
+	Forbidden        Code = code.Forbidden        // Forbidden
+	NotFound         Code = code.NotFound         // NotFound
+	Internal         Code = code.Internal         // Internal
+	Unauthorized     Code = code.Unauthorized     // Unauthorized
+	Unknown          Code = code.Unknown          // Unknown
 )

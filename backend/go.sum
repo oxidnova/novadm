@@ -108,6 +108,8 @@ github.com/oxidnova/go-kit/sqlxx v0.3.0 h1:oKT2Rn1ZhVBByixUZ3uijNYcIUeuScp6xqOF2
 github.com/oxidnova/go-kit/sqlxx v0.3.0/go.mod h1:RjQwfW4ImYpMFdjVbO7V0w3PHkAn6/HS/ktAVoHRzfY=
 github.com/oxidnova/go-kit/sqlxx/migration/sql-migrate v0.3.0 h1:sVCF78tggC2JEAfJ09gXwuRq7TwNLXSKiBAXQRUoNAE=
 github.com/oxidnova/go-kit/sqlxx/migration/sql-migrate v0.3.0/go.mod h1:E/DaugTM4/oAwbn//7dE3pInDSFv4aUViJbDVR4a4DM=
+github.com/oxidnova/go-kit/x v0.3.0 h1:4CRmSxx1oMGMJCA0HgowP2bAMrXVm2JvnNaHuunGAiw=
+github.com/oxidnova/go-kit/x v0.3.0/go.mod h1:AzsGMj3Kd27YHNzeUX/NGH1qv2afflpAYPJciKl7uVo=
 github.com/pelletier/go-toml v1.9.5 h1:4yBQzkHv+7BHq2PQUZF3Mx0IYxG7LsP222s7Agd3ve8=
 github.com/pelletier/go-toml v1.9.5/go.mod h1:u1nR/EPcESfeI/szUZKdtJ0xRNbUoANCkoOuaOx1Y+c=
 github.com/pelletier/go-toml/v2 v2.2.3 h1:YmeHyLY8mFWbdkNWwpr+qIL2bEqT0o95WSdkNHvL12M=
@@ -128,6 +130,7 @@ github.com/spf13/pflag v1.0.6/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
 github.com/stretchr/objx v0.5.0/go.mod h1:Yh+to48EsGEfYuaHDzXPcE3xhTkx73EhmCGUpEOglKo=
+github.com/stretchr/objx v0.5.2 h1:xuMeJ0Sdp5ZMRXx/aWO6RZxdr3beISkG5/G/aIRr3pY=
 github.com/stretchr/objx v0.5.2/go.mod h1:FRsXN1f5AsAjCGJKqEizvkpNtU+EGNCLh3NxZ/8L+MA=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
