@@ -13,6 +13,7 @@ type Config struct {
 	Version string `koanf:"version"`
 	Serve   Serve  `koanf:"serve"`
 	Auth    Auth   `koanf:"auth"`
+	DB      DB     `koanf:"db"`
 
 	Development bool `koanf:"dev"`
 }
@@ -65,3 +66,12 @@ type Credential struct {
 
 // Cors for cross domain config
 type Cors = cors_gin.Config
+
+type DB struct {
+	Dsn             string        `koanf:"dsn"`
+	MigrationPath   string        `koanf:"migration_path"`
+	MaxIdleConns    int           `koanf:"max_idle_conns"`
+	MaxOpenConns    int           `koanf:"max_open_conns"`
+	ConnMaxLifeTime time.Duration `koanf:"conn_max_life_time"`
+	ConnMaxIdleTime time.Duration `koanf:"conn_max_idle_time"`
+}
