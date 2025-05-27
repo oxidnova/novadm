@@ -17,8 +17,7 @@ type mockDependencies struct {
 }
 
 func (m *mockDependencies) Logger() logx.Logger {
-	args := m.Called()
-	return args.Get(0).(logx.Logger)
+	return logx.Default()
 }
 
 func (m *mockDependencies) Config() *config.Config {
@@ -32,7 +31,6 @@ func TestNewStorage(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// 创建模拟依赖
 		mockDeps := new(mockDependencies)
-		mockLogger := logx.Default()
 
 		// 设置配置
 		dbConfig := &config.Config{
@@ -46,7 +44,6 @@ func TestNewStorage(t *testing.T) {
 		}
 
 		// 设置模拟期望
-		mockDeps.On("Logger").Return(mockLogger)
 		mockDeps.On("Config").Return(dbConfig)
 
 		// 创建存储实例
@@ -65,7 +62,6 @@ func TestNewStorage(t *testing.T) {
 	t.Run("invalid_dsn", func(t *testing.T) {
 		// 创建模拟依赖
 		mockDeps := new(mockDependencies)
-		mockLogger := logx.Default()
 
 		// 设置无效的配置
 		dbConfig := &config.Config{
@@ -75,7 +71,6 @@ func TestNewStorage(t *testing.T) {
 		}
 
 		// 设置模拟期望
-		mockDeps.On("Logger").Return(mockLogger)
 		mockDeps.On("Config").Return(dbConfig)
 
 		// 尝试创建存储实例
@@ -90,18 +85,16 @@ func TestNewStorage(t *testing.T) {
 	t.Run("with_migration_path", func(t *testing.T) {
 		// 创建模拟依赖
 		mockDeps := new(mockDependencies)
-		mockLogger := logx.Default()
 
 		// 设置带迁移路径的配置
 		dbConfig := &config.Config{
 			DB: config.DB{
 				Dsn:           dsn,
-				MigrationPath: "./testdata/migrations",
+				MigrationPath: "./migrations",
 			},
 		}
 
 		// 设置模拟期望
-		mockDeps.On("Logger").Return(mockLogger)
 		mockDeps.On("Config").Return(dbConfig)
 
 		// 创建存储实例
@@ -122,7 +115,6 @@ func TestStorage_Close(t *testing.T) {
 	dsn := getDsn()
 	// 创建模拟依赖
 	mockDeps := new(mockDependencies)
-	mockLogger := logx.Default()
 
 	// 设置配置
 	dbConfig := &config.Config{
@@ -132,7 +124,6 @@ func TestStorage_Close(t *testing.T) {
 	}
 
 	// 设置模拟期望
-	mockDeps.On("Logger").Return(mockLogger)
 	mockDeps.On("Config").Return(dbConfig)
 
 	// 创建存储实例

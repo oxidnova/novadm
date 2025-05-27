@@ -6,7 +6,7 @@ type CrossConsultation struct {
 	ID        string    `db:"id"`
 	Prompt    string    `db:"prompt"`
 	Content   string    `db:"content"`
-	Status    int16     `db:"status"`
+	Status    int       `db:"status"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
 }
