@@ -3,6 +3,7 @@ package consultation
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/oxidnova/novadm/backend/driver"
+	"github.com/oxidnova/novadm/backend/svc/api/internal/mw"
 )
 
 type Handler struct {
@@ -16,13 +17,13 @@ func NewHandler(d driver.Registry, engine *gin.Engine) *Handler {
 }
 
 func (h *Handler) SetRoutes() {
-	// apiRouter := h.engine.Group("/api/ses")
-	//
-	// authmw := mw.NewAuth(h.d)
-	// acmw := mw.NewAc(h.d)
-	// apiRouter.Use(authmw.HandlerGin())
-	// apiRouter.Use(acmw.HandlerGin())
-	//
+	apiRouter := h.engine.Group("/api/consultation")
+
+	authmw := mw.NewAuth(h.d)
+	acmw := mw.NewAc(h.d)
+	apiRouter.Use(authmw.HandlerGin())
+	apiRouter.Use(acmw.HandlerGin())
+
 	// apiRouter.GET("/", h.searchSentEmails)
 	// apiRouter.POST("/send", h.sendEmail)
 	//

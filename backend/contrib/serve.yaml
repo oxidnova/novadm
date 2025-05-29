@@ -34,8 +34,8 @@ auth:
     algorithm: hs256
     key: 01JJG8A9W6H9ZEVRN353N7ZSMK
   credentials:
-    - username: super@example.com
-      realname: Super
+    - username: admin@example.com
+      realname: Admin
       # bcrypt hash of the string "password"
       password: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
       menus:

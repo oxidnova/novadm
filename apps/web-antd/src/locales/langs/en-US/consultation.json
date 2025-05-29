@@ -1,0 +1,13 @@
+{
+  "title": "Cross-border Consultation",
+  "status": "Current Status",
+  "prompt": "Prompt",
+  "consultation": "Consultation",
+  "dateRange": "Date Range",
+  "startTime": "Start Time",
+  "endTime": "End Time",
+  "createdAt": "Created Date",
+  "list": {
+    "title": "Daily Consultation (AI)"
+  }
+}

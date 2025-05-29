@@ -1,0 +1,13 @@
+{
+  "title": "跨境咨询",
+  "status": "当前状态",
+  "prompt": "提示",
+  "consultation": "咨询",
+  "dateRange": "日期范围",
+  "startTime": "开始时间",
+  "endTime": "结束时间",
+  "createdAt": "创建日期",
+  "list": {
+    "title": "每日咨询（AI）"
+  }
+}
