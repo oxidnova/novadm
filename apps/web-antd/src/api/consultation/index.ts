@@ -10,7 +10,12 @@ export namespace ConsultationApi {
   }
 
   export interface Consultation {
-    status: string;
+    id: string;
+    prompt: string;
+    content: string;
+    status: number;
+    createdAt: string;
+    updatedAt: string;
   }
 }
 

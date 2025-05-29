@@ -5,10 +5,11 @@ import type { ConsultationApi } from '#/api';
 
 import { Page } from '@vben/common-ui';
 
-import { message } from 'ant-design-vue';
+import { Button, message, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { $t } from '#/locales';
+import { formatDateFromTimestamp } from '#/utils';
 
 type RowType = ConsultationApi.Consultation;
 
@@ -17,38 +18,6 @@ const formOptions: VbenFormProps = {
   collapsed: false,
   fieldMappingTime: [['date', ['start', 'end']]],
   schema: [
-    // {
-    //   component: markRaw(QueryEmailField),
-    //   defaultValue: ['to', ''],
-    //   disabledOnChangeListener: false,
-    //   fieldName: 'queryEmail',
-    //   formItemClass: 'col-span-1',
-    //   label: $t('consultation.email'),
-    // },
-    {
-      component: 'Select',
-      componentProps: {
-        allowClear: true,
-        filterOption: true,
-        options: [
-          {
-            label: 'ERROR',
-            value: 'SendErr',
-          },
-          {
-            label: 'SendOK',
-            value: 'SendOK',
-          },
-        ],
-      },
-      fieldName: 'status',
-      label: $t('consultation.status'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'eid',
-      label: 'EID',
-    },
     {
       component: 'RangePicker',
       // defaultValue: [dayjs().subtract(1, 'days'), dayjs()],
@@ -67,6 +36,30 @@ const formOptions: VbenFormProps = {
       fieldName: 'timeRangeEnd',
       label: $t('consultation.endTime'),
     },
+    {
+      component: 'Input',
+      fieldName: 'id',
+      label: 'ID',
+    },
+    {
+      component: 'Select',
+      componentProps: {
+        allowClear: true,
+        filterOption: true,
+        options: [
+          {
+            label: 'Publiched',
+            value: 1,
+          },
+          {
+            label: 'UnPubliched',
+            value: 0,
+          },
+        ],
+      },
+      fieldName: 'status',
+      label: $t('consultation.status'),
+    },
   ],
   // 控制表单是否显示折叠按钮
   showCollapseButton: true,
@@ -84,16 +77,16 @@ const gridOptions: VxeGridProps<RowType> = {
   columns: [
     { title: $t('page.tab.seq'), type: 'seq', width: 50 },
     {
-      field: 'email.from',
-      slots: { default: 'from' },
-      title: 'From',
-      width: 280,
+      field: 'createdAt',
+      slots: { default: 'createdAt' },
+      title: $t('consultation.createdAt'),
+      width: 220,
     },
     {
-      field: 'email.to',
-      slots: { default: 'to' },
-      title: 'To',
-      width: 280,
+      field: 'prompt',
+      slots: { default: 'prompt' },
+      title: $t('consultation.prompt'),
+      width: 180,
     },
     {
       field: 'status',
@@ -102,21 +95,22 @@ const gridOptions: VxeGridProps<RowType> = {
       width: 100,
     },
     {
-      field: 'platform',
-      title: $t('consultation.platform'),
-      width: 100,
+      field: 'content',
+      slots: { default: 'content' },
+      title: $t('consultation.content'),
+      minWidth: 220,
     },
     {
-      field: 'send_date',
-      slots: { default: 'sendDate' },
-      title: $t('consultation.sendAt'),
+      field: 'updatedAt',
+      slots: { default: 'updatedAt' },
+      title: $t('consultation.updatedAt'),
       width: 220,
     },
     {
-      field: 'eid',
-      slots: { default: 'eid' },
-      title: 'EID',
-      minWidth: 280,
+      field: 'id',
+      slots: { default: 'id' },
+      title: 'ID',
+      width: 200,
     },
     {
       field: 'action',
@@ -166,12 +160,40 @@ const [Grid] = useVbenVxeGrid({
   formOptions,
   gridOptions,
 });
+
+const openDrawer = (_row: RowType) => {
+  // drawerApi.setState({ placement: 'left' }).setData<RowType>(row).open();
+};
 </script>
 
 <template>
   <Page auto-content-height>
     <Grid>
-      <div>consultation list</div>
+      <template #createdAt="{ row }">
+        <Tag>{{ formatDateFromTimestamp(row.createdAt) }}</Tag>
+      </template>
+      <template #prompt="{ row }">
+        <Tag>{{ row.prompt }}</Tag>
+      </template>
+      <template #status="{ row }">
+        <Tag :color="row.status === 1 ? '#87d068' : '#f50'">
+          {{ row.status === 1 ? 'Published' : 'UnPublished' }}
+        </Tag>
+      </template>
+      <template #content="{ row }">
+        {{ row.content }}
+      </template>
+      <template #updatedAt="{ row }">
+        <Tag>{{ formatDateFromTimestamp(row.updatedAt) }}</Tag>
+      </template>
+      <template #id="{ row }">
+        <Tag color=""> {{ row.id }}</Tag>
+      </template>
+      <template #action="{ row }">
+        <Button type="link" @click="openDrawer(row)">
+          {{ $t('page.tab.moreDetails') }}
+        </Button>
+      </template>
     </Grid>
   </Page>
 </template>

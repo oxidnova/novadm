@@ -10,5 +10,18 @@
     "title": "Dashboard",
     "analytics": "Analytics",
     "workspace": "Workspace"
-  }
+  },
+  "tab": {
+    "seq": "Seq",
+    "moreDetails": "More Details"
+  },
+  "action": "Action",
+  "save": "Save",
+  "cancel": "Cancel",
+  "edit": "Edit",
+  "delete": "Delete",
+  "add": "Add New",
+  "addSuccess": "Success to add new item",
+  "updateSuccess": "Success to update new item",
+  "deleteSuccess": "Success to delete new item"
 }

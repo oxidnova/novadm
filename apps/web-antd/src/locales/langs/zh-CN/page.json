@@ -10,5 +10,18 @@
     "title": "概览",
     "analytics": "分析页",
     "workspace": "工作台"
-  }
+  },
+  "tab": {
+    "seq": "序号",
+    "moreDetails": "详情"
+  },
+  "action": "操作",
+  "save": "保存",
+  "cancel": "取消",
+  "edit": "编辑",
+  "add": "新增",
+  "delete": "删除",
+  "addSuccess": "已成功添加",
+  "updateSuccess": "已成功更新",
+  "deleteSuccess": "已成功删除"
 }

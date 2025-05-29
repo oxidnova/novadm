@@ -1,4 +1,8 @@
-import { createIconifyIcon } from '@vben-core/icons';
+import { addCollection, createIconifyIcon } from '@vben-core/icons';
+
+import emojioneMonotone from './emojione-monotone.json';
+
+addCollection(emojioneMonotone);
 
 export * from '@vben-core/icons';
 
