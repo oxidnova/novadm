@@ -2,6 +2,8 @@ package sql
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -141,6 +143,71 @@ func (s *Storage) GetCrossConsultationsByTimeRange(startTime, endTime time.Time)
 	return consultations, nil
 }
 
+// ListCrossConsultationsByFilter retrieves records with filter and pagination
+func (s *Storage) ListCrossConsultationsByFilter(filter *storage.CrossConsultationFilter) ([]*storage.CrossConsultation, int, error) {
+	// Start a transaction
+	tx, err := s.db.Beginx()
+	if err != nil {
+		return nil, 0, errorx.Errorf(code.Internal, "failed to begin transaction: %w", err)
+	}
+	defer tx.Rollback() // Rollback if not committed
+
+	// Build query conditions
+	conditions := make([]string, 0)
+	args := make([]interface{}, 0)
+	argPos := 1
+
+	if filter.Status > 0 {
+		conditions = append(conditions, fmt.Sprintf("status = $%d", argPos))
+		args = append(args, filter.Status)
+		argPos++
+	}
+
+	if !filter.StartTime.IsZero() {
+		conditions = append(conditions, fmt.Sprintf("created_at >= $%d", argPos))
+		args = append(args, filter.StartTime)
+		argPos++
+	}
+
+	if !filter.EndTime.IsZero() {
+		conditions = append(conditions, fmt.Sprintf("created_at <= $%d", argPos))
+		args = append(args, filter.EndTime)
+		argPos++
+	}
+
+	// Build WHERE clause
+	whereClause := ""
+	if len(conditions) > 0 {
+		whereClause = "WHERE " + strings.Join(conditions, " AND ")
+	}
+
+	// Get total count
+	countQuery := fmt.Sprintf("SELECT COUNT(*) FROM cross_consultations %s", whereClause)
+	var total int
+	err = tx.Get(&total, countQuery, args...)
+	if err != nil {
+		return nil, 0, errorx.Errorf(code.Internal, "failed to get total count: %w", err)
+	}
+
+	// Get paginated records
+	query := fmt.Sprintf("SELECT * FROM cross_consultations %s ORDER BY created_at DESC LIMIT $%d OFFSET $%d",
+		whereClause, argPos, argPos+1)
+	args = append(args, filter.Limit, filter.Offset)
+
+	var records []*storage.CrossConsultation
+	err = tx.Select(&records, query, args...)
+	if err != nil {
+		return nil, 0, errorx.Errorf(code.Internal, "failed to query consultations: %w", err)
+	}
+
+	// Commit the transaction
+	if err := tx.Commit(); err != nil {
+		return nil, 0, errorx.Errorf(code.Internal, "failed to commit transaction: %w", err)
+	}
+
+	return records, total, nil
+}
+
 // DeleteCrossConsultation deletes a cross consultation record by ID
 func (s *Storage) DeleteCrossConsultation(id string) error {
 	query := `DELETE FROM cross_consultations WHERE id = $1`
@@ -169,12 +236,17 @@ func (s *Storage) CreateCrossConsultation(consultation *storage.CrossConsultatio
 		RETURNING id
 	`
 	now := time.Now()
+	if consultation.CreatedAt.IsZero() {
+		consultation.CreatedAt = now
+	} else {
+		consultation.UpdatedAt = consultation.CreatedAt
+	}
 	err := s.db.QueryRow(query,
 		consultation.Prompt,
 		consultation.Content,
 		consultation.Status,
-		now,
-		now,
+		consultation.CreatedAt,
+		consultation.UpdatedAt,
 	).Scan(&consultation.ID)
 
 	if err != nil {

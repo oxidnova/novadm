@@ -158,9 +158,41 @@ func TestCrossConsultation(t *testing.T) {
 		assert.Equal(t, 3, result.Status)
 	})
 
+	// 测试根据过滤器获取咨询列表
+	t.Run("ListCrossConsultationsByFilter", func(t *testing.T) {
+		// 创建测试数据
+		now := time.Now()
+		consultation1 := &storage.CrossConsultation{Prompt: "filter test 1", Content: "content 1", Status: 4, CreatedAt: now}
+		consultation2 := &storage.CrossConsultation{Prompt: "filter test 2", Content: "content 2", Status: 5, CreatedAt: now}
+		require.NoError(t, stg.CreateCrossConsultation(consultation1))
+		require.NoError(t, stg.CreateCrossConsultation(consultation2))
+
+		// 测试状态过滤
+		filter := &storage.CrossConsultationFilter{Status: 4, Limit: 20, Offset: 0}
+		results, count, err := stg.ListCrossConsultationsByFilter(filter)
+		assert.NoError(t, err)
+		assert.GreaterOrEqual(t, count, 1)
+		assert.Equal(t, 4, results[0].Status)
+
+		// 测试关键词过滤
+		filter = &storage.CrossConsultationFilter{StartTime: now, Limit: 20}
+		results, count, err = stg.ListCrossConsultationsByFilter(filter)
+		assert.NoError(t, err)
+		assert.GreaterOrEqual(t, count, 2)
+		// assert.Contains(t, results[0].Prompt, "test 1")
+
+		// 测试组合过滤
+		filter = &storage.CrossConsultationFilter{Status: 5, StartTime: now, Limit: 20}
+		results, count, err = stg.ListCrossConsultationsByFilter(filter)
+		assert.NoError(t, err)
+		assert.GreaterOrEqual(t, count, 1)
+		assert.Equal(t, 5, results[0].Status)
+		assert.Contains(t, results[0].Prompt, "test 2")
+	})
+
 	// 清理测试数据
 	t.Cleanup(func() {
-		for _, status := range []int{1, 2, 3} {
+		for _, status := range []int{1, 2, 3, 4, 5} {
 			// 获取所有咨询记录
 			results, err := stg.GetCrossConsultationsByStatus(status)
 			if err != nil {

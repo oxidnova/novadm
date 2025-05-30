@@ -21,10 +21,6 @@ func RespondItems(c *gin.Context, total int, items any) {
 	respond(c, http.StatusOK, code.Success, "success", schema.ArrayItem{Total: total, Items: items})
 }
 
-func RespondItemsWithLastId(c *gin.Context, total int, lastId string, items any) {
-	respond(c, http.StatusOK, code.Success, "success", schema.ArrayItem{Total: total, Items: items, LastId: lastId})
-}
-
 func respond(c *gin.Context, httpCode int, code code.Code, message string, d any) {
 	c.JSON(httpCode, schema.Response{
 		Code:    int(code),
