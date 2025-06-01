@@ -10,6 +10,7 @@
   "updatedAt": "更新日期",
   "content": "内容",
   "list": {
-    "title": "每日咨询（AI）"
+    "title": "每日咨询（AI）",
+    "moreDetailsTitle": "咨询详情"
   }
 }

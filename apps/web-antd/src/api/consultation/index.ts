@@ -4,9 +4,10 @@ export namespace ConsultationApi {
   export interface FetchParams {
     page: number;
     pageSize: number;
-    startTime: number;
-    endTime: number;
-    status: string;
+    startTime?: number;
+    endTime?: number;
+    id?: string;
+    status?: string;
   }
 
   export interface Consultation {
@@ -20,7 +21,7 @@ export namespace ConsultationApi {
 }
 
 async function searchConsultationsApi(params: ConsultationApi.FetchParams) {
-  return requestClient.get('/ses', { params });
+  return requestClient.get('/consultation', { params });
 }
 
 export { searchConsultationsApi };

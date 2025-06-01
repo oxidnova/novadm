@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
           title: $t('consultation.list.title'),
           keepAlive: true,
         },
-        name: 'SESList',
+        name: 'ConsultationList',
         path: '/consultation/list',
         component: () => import('#/views/consultation/list.vue'),
       },

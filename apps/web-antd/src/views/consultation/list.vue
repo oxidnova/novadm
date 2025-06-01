@@ -3,13 +3,16 @@ import type { VbenFormProps } from '#/adapter/form';
 import type { VxeGridProps } from '#/adapter/vxe-table';
 import type { ConsultationApi } from '#/api';
 
-import { Page } from '@vben/common-ui';
+import { EllipsisText, Page, useVbenDrawer } from '@vben/common-ui';
 
 import { Button, message, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { searchConsultationsApi } from '#/api';
 import { $t } from '#/locales';
-import { formatDateFromTimestamp } from '#/utils';
+import { formatDateFromRFC3339 } from '#/utils';
+
+import ConsultationDrawer from './consultationDrawer.vue';
 
 type RowType = ConsultationApi.Consultation;
 
@@ -48,12 +51,16 @@ const formOptions: VbenFormProps = {
         filterOption: true,
         options: [
           {
-            label: 'Publiched',
+            label: 'Draft',
+            value: 2,
+          },
+          {
+            label: 'Fetching',
             value: 1,
           },
           {
-            label: 'UnPubliched',
-            value: 0,
+            label: 'Publiched',
+            value: 3,
           },
         ],
       },
@@ -69,6 +76,34 @@ const formOptions: VbenFormProps = {
   submitOnEnter: false,
 };
 
+const getFetchParams = (
+  formValues: any,
+  currentPage: number,
+  pageSize: number,
+): ConsultationApi.FetchParams => {
+  const startTime = formValues.dateRange?.[0]
+    ?.hour(formValues.timeRangeStart?.hour() ?? 0)
+    .minute(formValues.timeRangeStart?.minute() ?? 0)
+    .second(formValues.timeRangeStart?.second() ?? 0)
+    .unix();
+  const endTime = formValues?.dateRange?.[1]
+    ?.hour(formValues.timeRangeEnd?.hour() ?? 23)
+    .minute(formValues.timeRangeEnd?.minute() ?? 59)
+    .second(formValues.timeRangeEnd?.second() ?? 59)
+    .unix();
+
+  const params: ConsultationApi.FetchParams = {
+    page: currentPage,
+    pageSize,
+    startTime,
+    endTime,
+    id: formValues.id,
+    status: formValues.status,
+  };
+
+  return params;
+};
+
 const gridOptions: VxeGridProps<RowType> = {
   checkboxConfig: {
     highlight: true,
@@ -80,13 +115,7 @@ const gridOptions: VxeGridProps<RowType> = {
       field: 'createdAt',
       slots: { default: 'createdAt' },
       title: $t('consultation.createdAt'),
-      width: 220,
-    },
-    {
-      field: 'prompt',
-      slots: { default: 'prompt' },
-      title: $t('consultation.prompt'),
-      width: 180,
+      width: 200,
     },
     {
       field: 'status',
@@ -95,27 +124,33 @@ const gridOptions: VxeGridProps<RowType> = {
       width: 100,
     },
     {
+      field: 'prompt',
+      slots: { default: 'prompt' },
+      title: $t('consultation.prompt'),
+      width: 140,
+    },
+    {
       field: 'content',
       slots: { default: 'content' },
       title: $t('consultation.content'),
-      minWidth: 220,
+      minWidth: 400,
     },
     {
       field: 'updatedAt',
       slots: { default: 'updatedAt' },
       title: $t('consultation.updatedAt'),
-      width: 220,
+      width: 200,
     },
     {
       field: 'id',
       slots: { default: 'id' },
       title: 'ID',
-      width: 200,
+      width: 280,
     },
     {
       field: 'action',
-      slots: { default: 'action' },
       fixed: 'right',
+      slots: { default: 'action' },
       title: $t('page.action'),
       width: 120,
     },
@@ -123,25 +158,20 @@ const gridOptions: VxeGridProps<RowType> = {
   exportConfig: {},
   height: 'auto',
   keepSource: true,
-  pagerConfig: {},
+  pagerConfig: {
+    pageSize: 10,
+  },
   proxyConfig: {
     ajax: {
       query: async ({ page }, formValues) => {
-        const params = {
-          ...formValues,
-          page: page.currentPage,
-          limit: page.pageSize,
-        };
-        // const params = toFetchParams(
-        //   formValues,
-        //   page.currentPage,
-        //   page.pageSize,
-        // );
+        const params = getFetchParams(
+          formValues,
+          page.currentPage,
+          page.pageSize,
+        );
         message.success(`Query params: ${JSON.stringify(params)}`);
-        // const data = await searchEmailsApi(params);
-        // pageCache.set(page.currentPage, data.lastId);
-        // return data;
-        return {};
+        const data = await searchConsultationsApi(params);
+        return data;
       },
     },
   },
@@ -161,8 +191,14 @@ const [Grid] = useVbenVxeGrid({
   gridOptions,
 });
 
-const openDrawer = (_row: RowType) => {
-  // drawerApi.setState({ placement: 'left' }).setData<RowType>(row).open();
+const [Drawer, drawerApi] = useVbenDrawer({
+  connectedComponent: ConsultationDrawer,
+  showConfirmButton: false,
+  showCancelButton: false,
+});
+
+const openDrawer = (row: RowType) => {
+  drawerApi.setState({ placement: 'left' }).setData<RowType>(row).open();
 };
 </script>
 
@@ -170,21 +206,37 @@ const openDrawer = (_row: RowType) => {
   <Page auto-content-height>
     <Grid>
       <template #createdAt="{ row }">
-        <Tag>{{ formatDateFromTimestamp(row.createdAt) }}</Tag>
+        <Tag>{{ formatDateFromRFC3339(row.createdAt) }}</Tag>
+      </template>
+      <template #status="{ row }">
+        <Tag
+          :color="
+            row?.status === 2
+              ? '#cca43f'
+              : row?.status === 3
+                ? '#87d068'
+                : '#f50'
+          "
+        >
+          {{
+            row.status === 2
+              ? 'Draft'
+              : row.status === 3
+                ? 'Publiched'
+                : 'Fetching'
+          }}
+        </Tag>
       </template>
       <template #prompt="{ row }">
         <Tag>{{ row.prompt }}</Tag>
       </template>
-      <template #status="{ row }">
-        <Tag :color="row.status === 1 ? '#87d068' : '#f50'">
-          {{ row.status === 1 ? 'Published' : 'UnPublished' }}
-        </Tag>
-      </template>
       <template #content="{ row }">
-        {{ row.content }}
+        <EllipsisText :line="1" expand>
+          {{ row.content }}
+        </EllipsisText>
       </template>
       <template #updatedAt="{ row }">
-        <Tag>{{ formatDateFromTimestamp(row.updatedAt) }}</Tag>
+        <Tag>{{ formatDateFromRFC3339(row.updatedAt) }}</Tag>
       </template>
       <template #id="{ row }">
         <Tag color=""> {{ row.id }}</Tag>
@@ -195,5 +247,6 @@ const openDrawer = (_row: RowType) => {
         </Button>
       </template>
     </Grid>
+    <Drawer />
   </Page>
 </template>

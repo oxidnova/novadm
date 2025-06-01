@@ -5,8 +5,7 @@ import "time"
 const (
 	StatusFetching  int = 1 // 正在抓取
 	StatusDraft     int = 2 // 草稿
-	StatusCompleted int = 3 // 生成完成
-	StatusPublished int = 4 // 已发布
+	StatusPublished int = 3 // 已发布
 )
 
 type CrossConsultation struct {

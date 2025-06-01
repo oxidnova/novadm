@@ -10,6 +10,7 @@
   "updatedAt": "Updated Date",
   "content": "Content",
   "list": {
-    "title": "Daily Consultation (AI)"
+    "title": "Daily Consultation (AI)",
+    "moreDetailsTitle": "Consultation Details"
   }
 }

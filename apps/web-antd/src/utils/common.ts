@@ -9,4 +9,11 @@ const formatDateFromTimestamp = (timestamp: number) => {
   return dayjs(timestamp * 1000).format('YYYY-MM-DD HH:mm:ssZ');
 };
 
-export { formatDateFromTimestamp };
+const formatDateFromRFC3339 = (date?: string) => {
+  if (!date) {
+    return '';
+  }
+  return dayjs(date).format('YYYY-MM-DD HH:mm:ssZ');
+};
+
+export { formatDateFromRFC3339, formatDateFromTimestamp };
