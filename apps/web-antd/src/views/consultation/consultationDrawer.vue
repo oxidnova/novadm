@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 import { ColPage, useVbenDrawer } from '@vben/common-ui';
 
-import { Alert, Tag } from 'ant-design-vue';
+import { Alert, Button, Tag } from 'ant-design-vue';
 
 import { $t } from '#/locales';
 import { formatDateFromRFC3339 } from '#/utils';
@@ -23,6 +23,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
     row.value = drawerApi.getData<RowType>();
   },
 });
+
+const generateImage = () => {};
 </script>
 
 <template>
@@ -32,18 +34,23 @@ const [Drawer, drawerApi] = useVbenDrawer({
         {{ $t('consultation.list.moreDetailsTitle') }}
       </p>
     </template>
+    <template #extra>
+      <Button type="primary" danger @click="generateImage()">
+        {{ $t('consultation.list.exportImage') }}
+      </Button>
+    </template>
     <ColPage
       auto-content-height
       v-bind="{
-        leftWidth: 35,
+        leftWidth: 50,
         leftMinWidth: 20,
         resizable: true,
         rightCollapsedWidth: 20,
         rightCollapsible: true,
-        rightWidth: 65,
+        rightWidth: 50,
         rightMinWidth: 20,
         splitHandle: false,
-        splitLine: false,
+        splitLine: true,
       }"
     >
       <template #title>
@@ -59,7 +66,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
         >
           <template #description>
             <p class="mb-2">
-              <!-- <Tag class="bg-green-500">{{ $t('consultation.status') }}</Tag> -->
               <Tag
                 class="bg-green-500"
                 :color="
@@ -89,6 +95,12 @@ const [Drawer, drawerApi] = useVbenDrawer({
             </p>
           </template>
         </Alert>
+      </template>
+      <template #left>
+        <div>left</div>
+      </template>
+      <template #default="">
+        <div>right</div>
       </template>
     </ColPage>
   </Drawer>

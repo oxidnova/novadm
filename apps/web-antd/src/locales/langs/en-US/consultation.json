@@ -11,6 +11,7 @@
   "content": "Content",
   "list": {
     "title": "Daily Consultation (AI)",
-    "moreDetailsTitle": "Consultation Details"
+    "moreDetailsTitle": "Consultation Details",
+    "exportImage": "Export Image"
   }
 }
