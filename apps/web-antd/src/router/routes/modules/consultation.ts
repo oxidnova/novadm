@@ -25,29 +25,12 @@ const routes: RouteRecordRaw[] = [
       },
       // {
       //   meta: {
-      //     title: $t('consultation.sent.title'),
+      //     title: '测试',
       //     keepAlive: true,
       //   },
-      //   name: 'SESSent',
-      //   path: '/consultation/sent',
-      //   component: () => import('#/views/consultation/console.vue'),
-      // },
-      // {
-      //   meta: {
-      //     title: $t('consultation.template.title'),
-      //   },
-      //   name: 'SESTemplate',
-      //   path: '/consultation/template',
-      //   component: () => import('#/views/consultation/template.vue'),
-      // },
-      // {
-      //   meta: {
-      //     title: $t('consultation.blacklist.title'),
-      //     keepAlive: true,
-      //   },
-      //   name: 'SESBlacklist',
-      //   path: '/consultation/blacklist',
-      //   component: () => import('#/views/consultation/blacklist.vue'),
+      //   name: 'consultationTest',
+      //   path: '/consultation/test',
+      //   component: () => import('#/views/consultation/test.vue'),
       // },
     ],
   },
