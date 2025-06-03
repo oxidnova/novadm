@@ -23,5 +23,6 @@
   "add": "Add New",
   "addSuccess": "Success to add new item",
   "updateSuccess": "Success to update new item",
+  "deletePrompt": "Are you sure you want to delete this item",
   "deleteSuccess": "Success to delete new item"
 }

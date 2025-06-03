@@ -34,6 +34,7 @@ func (h *Handler) SetRoutes() {
 
 	apiRouter.GET("/", h.searchConsultations)
 	apiRouter.POST("/gen", h.genConsultation)
+	apiRouter.POST("/", h.updateConsultation)
 	apiRouter.DELETE("/:id", h.delConsultation)
 }
 
@@ -110,10 +111,59 @@ func toListCrossConsultationsByFilter(params searchConsultationsParams) *storage
 	return where
 }
 
+type genConsultationParams struct {
+	Prompt string `json:"prompt" form:"prompt"`
+}
+
 func (h *Handler) genConsultation(c *gin.Context) {
-	date := time.Now().Format("2006-01-02")
-	if err := h.d.N8nProxy().CallWebhookForGenConsultation(date); err != nil {
+	var params genConsultationParams
+	if err := c.ShouldBindQuery(&params); err != nil {
+		httpx.RespondMessage(c, http.StatusBadRequest, code.InvalidArguments, "invalid arguments for this request.")
+		return
+	}
+
+	if params.Prompt == "" {
+		params.Prompt = time.Now().Format("2006-01-02")
+	}
+
+	if err := h.d.N8nProxy().CallWebhookForGenConsultation(params.Prompt); err != nil {
 		h.d.Logger().Info("gen consultation: " + err.Error())
+		httpx.HandlerError(c, err)
+		return
+	}
+
+	httpx.RespondSuccess(c, nil)
+}
+
+type updateConsultationParams struct {
+	ID      string `json:"id" form:"id"`
+	Content string `json:"content" form:"content"`
+}
+
+func (h *Handler) updateConsultation(c *gin.Context) {
+	var params updateConsultationParams
+	if err := c.ShouldBindJSON(&params); err != nil {
+		httpx.RespondMessage(c, http.StatusBadRequest, code.InvalidArguments, "invalid arguments for this request.")
+		return
+	}
+
+	if params.ID == "" {
+		httpx.RespondMessage(c, http.StatusBadRequest, code.InvalidArguments, "missing id for this request.")
+		return
+	}
+
+	if params.Content == "" {
+		httpx.RespondMessage(c, http.StatusBadRequest, code.InvalidArguments, "missing content for this request.")
+		return
+	}
+
+	if err := h.d.Storage().UpdateCrossConsultationById(params.ID,
+		func(o storage.CrossConsultation) (storage.CrossConsultation, error) {
+			o.Content = params.Content
+			o.UpdatedAt = time.Now().UTC()
+			return o, nil
+		}); err != nil {
+		h.d.Logger().Info("update consultation: " + err.Error())
 		httpx.HandlerError(c, err)
 		return
 	}

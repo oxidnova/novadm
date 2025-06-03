@@ -23,5 +23,6 @@
   "delete": "删除",
   "addSuccess": "已成功添加",
   "updateSuccess": "已成功更新",
+  "deletePrompt": "确定要删除该数据吗？",
   "deleteSuccess": "已成功删除"
 }

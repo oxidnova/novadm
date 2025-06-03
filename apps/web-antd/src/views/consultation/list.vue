@@ -9,7 +9,11 @@ import { IconifyIcon } from '@vben/icons';
 import { Button, message, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { searchConsultationsApi } from '#/api';
+import {
+  deleteConsultationsApi,
+  genConsultationsApi,
+  searchConsultationsApi,
+} from '#/api';
 import { $t } from '#/locales';
 import { formatDateFromRFC3339 } from '#/utils';
 
@@ -153,7 +157,7 @@ const gridOptions: VxeGridProps<RowType> = {
       fixed: 'right',
       slots: { default: 'action' },
       title: $t('page.action'),
-      width: 120,
+      width: 140,
     },
   ],
   exportConfig: {},
@@ -187,7 +191,7 @@ const gridOptions: VxeGridProps<RowType> = {
   showOverflow: false,
 };
 
-const [Grid] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridOptions,
 });
@@ -202,13 +206,34 @@ const openDrawer = (row: RowType) => {
   drawerApi.setState({ placement: 'left' }).setData<RowType>(row).open();
 };
 
-const openAiConfirm = () => {
+const openGenConfirm = () => {
   confirm({
     centered: false,
     content: $t('consultation.list.aiConfirmPrompt'),
     icon: 'question',
-  }).then(() => {
-    message.success('用户确认了操作');
+  }).then(async () => {
+    gridApi.setLoading(true);
+    await genConsultationsApi('');
+
+    gridApi.reload();
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    gridApi.setLoading(false);
+
+    message.success(`${$t('page.addSuccess')}`);
+  });
+};
+
+const deleteConfirm = (row: RowType) => {
+  confirm({
+    centered: false,
+    content: $t('page.deletePrompt'),
+    icon: 'question',
+  }).then(async () => {
+    await deleteConsultationsApi(row.id);
+
+    // reload grid data
+    gridApi.reload();
+    message.success(`${$t('page.deleteSuccess')}`);
   });
 };
 </script>
@@ -217,7 +242,7 @@ const openAiConfirm = () => {
   <Page auto-content-height>
     <Grid>
       <template #toolbar-tools>
-        <Button class="mr-2" type="text" shape="circle" @click="openAiConfirm">
+        <Button class="mr-2" type="text" shape="circle" @click="openGenConfirm">
           <template #icon>
             <IconifyIcon class="text-2xl" icon="skill-icons:aiscript-dark" />
           </template>
@@ -262,6 +287,9 @@ const openAiConfirm = () => {
       <template #action="{ row }">
         <Button type="link" @click="openDrawer(row)">
           {{ $t('page.tab.moreDetails') }}
+        </Button>
+        <Button type="link" danger @click="deleteConfirm(row)">
+          {{ $t('page.delete') }}
         </Button>
       </template>
     </Grid>
