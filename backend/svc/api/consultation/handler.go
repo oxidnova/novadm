@@ -2,6 +2,7 @@ package consultation
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -32,7 +33,8 @@ func (h *Handler) SetRoutes() {
 	apiRouter.Use(acmw.HandlerGin())
 
 	apiRouter.GET("/", h.searchConsultations)
-	apiRouter.POST("/crawl", h.crawlConsultation)
+	apiRouter.POST("/gen", h.genConsultation)
+	apiRouter.DELETE("/:id", h.delConsultation)
 }
 
 type searchConsultationsParams struct {
@@ -108,5 +110,35 @@ func toListCrossConsultationsByFilter(params searchConsultationsParams) *storage
 	return where
 }
 
-func (h *Handler) crawlConsultation(c *gin.Context) {
+func (h *Handler) genConsultation(c *gin.Context) {
+	date := time.Now().Format("2006-01-02")
+	if err := h.d.N8nProxy().CallWebhookForGenConsultation(date); err != nil {
+		h.d.Logger().Info("gen consultation: " + err.Error())
+		httpx.HandlerError(c, err)
+		return
+	}
+
+	httpx.RespondSuccess(c, nil)
+}
+
+func (h *Handler) delConsultation(c *gin.Context) {
+	id := strings.TrimSpace(c.Param("id"))
+	if id == "" {
+		httpx.RespondMessage(c, http.StatusBadRequest, code.InvalidArguments, "missing id for this request.")
+		return
+	}
+
+	if err := h.d.Storage().DeleteCrossConsultation(id); err != nil {
+		errStatus := errorx.ConvertError(err)
+		if errStatus.Code == code.NotFound {
+			httpx.RespondSuccess(c, nil)
+			return
+		}
+
+		h.d.Logger().Info("del consultation: " + err.Error())
+		httpx.HandlerError(c, err)
+		return
+	}
+
+	httpx.RespondSuccess(c, nil)
 }

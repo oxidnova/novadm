@@ -5,6 +5,7 @@ import (
 
 	"github.com/oxidnova/go-kit/logx"
 	"github.com/oxidnova/novadm/backend/driver/auth"
+	"github.com/oxidnova/novadm/backend/driver/n8n"
 	"github.com/oxidnova/novadm/backend/internal/config"
 	"github.com/oxidnova/novadm/backend/storage"
 	"github.com/oxidnova/novadm/backend/storage/sql"
@@ -17,6 +18,7 @@ type Registry interface {
 
 	Storage() storage.Storage
 	AuthManager() auth.Manager
+	N8nProxy() n8n.Proxy
 }
 
 // NewRegistry retrun a registry
@@ -46,6 +48,7 @@ type registry struct {
 
 	stg         storage.Storage
 	authManager auth.Manager
+	n8nProxy    n8n.Proxy
 }
 
 func (r *registry) Logger() logx.Logger {
@@ -66,4 +69,12 @@ func (r *registry) AuthManager() auth.Manager {
 	}
 
 	return r.authManager
+}
+
+func (r *registry) N8nProxy() n8n.Proxy {
+	if r.n8nProxy == nil {
+		r.n8nProxy = n8n.NewProxy(r)
+	}
+
+	return r.n8nProxy
 }

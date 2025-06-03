@@ -57,4 +57,9 @@ db:
   #conn_max_life_time: 2h
   #conn_max_idle_time: 2h
 
+n8n:
+  webhook:
+    method: POST
+    endpoint: http://localhost:5678/webhook/dc366f29-0d0b-4c69-a8f7-235ad494cdcc
+
 dev: false

@@ -14,6 +14,7 @@ type Config struct {
 	Serve   Serve  `koanf:"serve"`
 	Auth    Auth   `koanf:"auth"`
 	DB      DB     `koanf:"db"`
+	N8N     N8N    `koanf:"n8n"`
 
 	Development bool `koanf:"dev"`
 }
@@ -74,4 +75,13 @@ type DB struct {
 	MaxOpenConns    int           `koanf:"max_open_conns"`
 	ConnMaxLifeTime time.Duration `koanf:"conn_max_life_time"`
 	ConnMaxIdleTime time.Duration `koanf:"conn_max_idle_time"`
+}
+
+type N8N struct {
+	Webhook N8NWebhook `koanf:"webhook"`
+}
+
+type N8NWebhook struct {
+	Method   string `koanf:"method"`
+	Endpoint string `koanf:"endpoint"`
 }
