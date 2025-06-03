@@ -12,6 +12,7 @@
   "list": {
     "title": "Daily Consultation (AI)",
     "moreDetailsTitle": "Consultation Details",
-    "exportImage": "Export Image"
+    "exportImage": "Export Image",
+    "aiConfirmPrompt": "Are you sure you want to call the AI to generate today's consultation?"
   }
 }

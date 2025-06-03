@@ -12,6 +12,7 @@
   "list": {
     "title": "每日咨询(AI)",
     "moreDetailsTitle": "咨询详情",
-    "exportImage": "导出图片"
+    "exportImage": "导出图片",
+    "aiConfirmPrompt": "确定要调用AI生成今日咨询吗？"
   }
 }

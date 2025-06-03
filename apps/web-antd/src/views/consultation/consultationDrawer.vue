@@ -90,7 +90,10 @@ const mdContent = ref('');
       <div
         class="relative flex min-h-32 items-center justify-center gap-2 overflow-hidden"
       >
-        <MarkdownEditor v-model="mdContent" />
+        <MarkdownEditor
+          style="height: calc(100vh - 320px)"
+          v-model="mdContent"
+        />
       </div>
     </Card>
   </Drawer>

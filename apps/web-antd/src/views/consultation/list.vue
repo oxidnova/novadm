@@ -3,7 +3,8 @@ import type { VbenFormProps } from '#/adapter/form';
 import type { VxeGridProps } from '#/adapter/vxe-table';
 import type { ConsultationApi } from '#/api';
 
-import { EllipsisText, Page, useVbenDrawer } from '@vben/common-ui';
+import { confirm, EllipsisText, Page, useVbenDrawer } from '@vben/common-ui';
+import { IconifyIcon } from '@vben/icons';
 
 import { Button, message, Tag } from 'ant-design-vue';
 
@@ -200,11 +201,28 @@ const [Drawer, drawerApi] = useVbenDrawer({
 const openDrawer = (row: RowType) => {
   drawerApi.setState({ placement: 'left' }).setData<RowType>(row).open();
 };
+
+const openAiConfirm = () => {
+  confirm({
+    centered: false,
+    content: $t('consultation.list.aiConfirmPrompt'),
+    icon: 'question',
+  }).then(() => {
+    message.success('用户确认了操作');
+  });
+};
 </script>
 
 <template>
   <Page auto-content-height>
     <Grid>
+      <template #toolbar-tools>
+        <Button class="mr-2" type="text" shape="circle" @click="openAiConfirm">
+          <template #icon>
+            <IconifyIcon class="text-2xl" icon="skill-icons:aiscript-dark" />
+          </template>
+        </Button>
+      </template>
       <template #createdAt="{ row }">
         <Tag>{{ formatDateFromRFC3339(row.createdAt) }}</Tag>
       </template>
