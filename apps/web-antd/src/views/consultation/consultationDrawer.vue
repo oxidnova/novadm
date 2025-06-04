@@ -4,6 +4,7 @@ import type { ConsultationApi } from '#/api';
 import { ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
+import { IconifyIcon } from '@vben/icons';
 
 import { Alert, Button, Card, Tag } from 'ant-design-vue';
 
@@ -82,9 +83,35 @@ const mdContent = ref('');
       <template #title>
         <div class="flex items-center justify-between gap-2">
           <span>{{ $t('consultation.content') }}</span>
-          <Button type="primary" size="small" danger @click="generateImage()">
-            {{ $t('consultation.list.exportImage') }}
-          </Button>
+          <div>
+            <Button
+              class="mr-2"
+              type="primary"
+              style="background-color: #52c41a"
+            >
+              <template #icon>
+                <IconifyIcon
+                  class="text-2xl"
+                  icon="material-symbols:save-as-outline"
+                />
+              </template>
+            </Button>
+            <Button
+              class="mr-2"
+              type="primary"
+              style="background-color: #52c41a"
+              @click="generateImage()"
+            >
+              <template #icon>
+                <IconifyIcon class="text-2xl" icon="line-md:download-loop" />
+              </template>
+            </Button>
+            <Button type="primary" style="background-color: #f50">
+              <template #icon>
+                <IconifyIcon class="text-2xl" icon="arcticons:efa-publish" />
+              </template>
+            </Button>
+          </div>
         </div>
       </template>
       <div

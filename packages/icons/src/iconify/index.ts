@@ -1,8 +1,10 @@
 import { addCollection, createIconifyIcon } from '@vben-core/icons';
 
 import emojioneMonotone from './emojione-monotone.json';
+import skillIcons from './skill-icons.json';
 
 addCollection(emojioneMonotone);
+addCollection(skillIcons);
 
 export * from '@vben-core/icons';
 
