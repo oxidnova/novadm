@@ -13,6 +13,8 @@
     "title": "每日咨询(AI)",
     "moreDetailsTitle": "咨询详情",
     "exportImage": "导出图片",
-    "aiConfirmPrompt": "确定要调用AI生成今日咨询吗？"
+    "aiConfirmPrompt": "确定要调用AI生成今日咨询吗？",
+    "contentRequired": "请输入内容后再进行操作。",
+    "contentNoModify": "当前内容无更改，无需执行操作。"
   }
 }

@@ -6,8 +6,9 @@ import { ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 
-import { Alert, Button, Card, Tag } from 'ant-design-vue';
+import { Alert, Button, Card, message, Tag } from 'ant-design-vue';
 
+import { updateConsultationsApi } from '#/api';
 import { $t } from '#/locales';
 import { formatDateFromRFC3339 } from '#/utils';
 
@@ -29,6 +30,24 @@ const [Drawer, drawerApi] = useVbenDrawer({
 });
 
 const generateImage = () => {};
+
+const saveContent = async () => {
+  if (!mdContent.value) {
+    message.success(`${$t('consultation.list.contentRequired')}`);
+    return;
+  }
+
+  if (mdContent.value === row.value?.content) {
+    message.success(`${$t('consultation.list.contentNoModify')}`);
+    return;
+  }
+
+  await updateConsultationsApi(row.value?.id || '', mdContent.value);
+  if (row.value) {
+    row.value.content = mdContent.value;
+  }
+  message.success(`${$t('page.updateSuccess')}`);
+};
 
 const mdContent = ref('');
 </script>
@@ -84,11 +103,7 @@ const mdContent = ref('');
         <div class="flex items-center justify-between gap-2">
           <span>{{ $t('consultation.content') }}</span>
           <div>
-            <Button
-              class="mr-2"
-              type="primary"
-              style="background-color: #52c41a"
-            >
+            <Button class="mr-2" type="primary" @click="saveContent()">
               <template #icon>
                 <IconifyIcon
                   class="text-2xl"
@@ -96,19 +111,14 @@ const mdContent = ref('');
                 />
               </template>
             </Button>
-            <Button
-              class="mr-2"
-              type="primary"
-              style="background-color: #52c41a"
-              @click="generateImage()"
-            >
+            <Button class="mr-2" type="primary" @click="generateImage()">
               <template #icon>
                 <IconifyIcon class="text-2xl" icon="line-md:download-loop" />
               </template>
             </Button>
             <Button type="primary" style="background-color: #f50">
               <template #icon>
-                <IconifyIcon class="text-2xl" icon="arcticons:efa-publish" />
+                <IconifyIcon class="text-2xl" icon="gridicons:share-computer" />
               </template>
             </Button>
           </div>

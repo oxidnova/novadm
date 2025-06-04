@@ -28,8 +28,8 @@ async function genConsultationsApi(prompt: string) {
   return requestClient.post('/consultation/gen', { params: { prompt } });
 }
 
-async function updateConsultationsApi(data: ConsultationApi.Consultation) {
-  return requestClient.post('/consultation/gen', data);
+async function updateConsultationsApi(id: string, content: string) {
+  return requestClient.post('/consultation', { id, content });
 }
 
 async function deleteConsultationsApi(id: string) {
